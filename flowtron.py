@@ -45,7 +45,8 @@ def get_mask_from_lengths(lengths):
         mask (torch.tensor): num_sequences x max_length x 1 binary tensor
     """
     max_len = torch.max(lengths).item()
-    ids = torch.arange(0, max_len, out=torch.cuda.LongTensor(max_len))
+    # ids = torch.arange(0, max_len, out=torch.cuda.LongTensor(max_len))
+    ids = torch.arange(0, max_len, out=torch.LongTensor(max_len))
     mask = (ids < lengths.unsqueeze(1)).bool()
     return mask
 
@@ -782,8 +783,9 @@ class AR_Step(torch.nn.Module):
 
         output = None
         attn = None
-        dummy = torch.cuda.FloatTensor(
-            1, residual.size(1), residual.size(2)).zero_()
+        # TODO(cm)
+        # dummy = torch.cuda.FloatTensor(1, residual.size(1), residual.size(2)).zero_()
+        dummy = torch.FloatTensor(1, residual.size(1), residual.size(2)).zero_()
         for i in range(0, residual.size(0)):
             if i == 0:
                 attention_hidden, (h, c) = self.attention_lstm(dummy)

@@ -1,4 +1,6 @@
+import os
 import re
+
 from .cmudict import CMUDict
 
 _letter_to_arpabet = {
@@ -33,7 +35,10 @@ _letter_to_arpabet = {
 
 # must ignore roman numerals
 _acronym_re = re.compile(r'([A-Z][A-Z]+)s?|([A-Z]\.([A-Z]\.)+s?)')
-cmudict = CMUDict('data/cmudict_dictionary', keep_ambiguous=False)
+
+file_dir = os.path.dirname(os.path.realpath(__file__))
+dict_path = os.path.realpath(os.path.join(file_dir, "../data/cmudict_dictionary"))
+cmudict = CMUDict(dict_path, keep_ambiguous=False)
 
 
 def _expand_acronyms(m, add_spaces=True):

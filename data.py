@@ -143,7 +143,7 @@ class Data(torch.utils.data.Dataset):
     def create_speaker_lookup_table(self, audiopaths_and_text):
         speaker_ids = np.sort(np.unique([x[2] for x in audiopaths_and_text]))
         d = {int(speaker_ids[i]): i for i in range(len(speaker_ids))}
-        print("Number of speakers :", len(d))
+        # print("Number of speakers :", len(d))
         return d
 
     def get_mel(self, audio):

@@ -1,4 +1,5 @@
 """ from https://github.com/keithito/tacotron """
+import os
 import re
 from text import cleaners
 from text.symbols import symbols
@@ -74,7 +75,7 @@ def _arpabet_to_sequence(text):
 
 
 def _should_keep_symbol(s):
-    return s in _symbol_to_id and s is not '_' and s is not '~'
+    return s in _symbol_to_id and s != '_' and s != '~'
 
 
 def get_arpabet(word, cmudict, index=0):
@@ -117,4 +118,6 @@ def files_to_list(filename):
     files = [f.rstrip() for f in files]
     return files
 
-HETERONYMS = set(files_to_list('data/heteronyms'))
+file_dir = os.path.dirname(os.path.realpath(__file__))
+heteronyms_path = os.path.realpath(os.path.join(file_dir, "../data/heteronyms"))
+HETERONYMS = set(files_to_list(heteronyms_path))

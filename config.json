@@ -38,7 +38,7 @@
         "max_wav_value": 32768.0,
         "use_attn_prior": true,
         "attn_prior_threshold": 0.0,
-        "prior_cache_path": "/attention_prior_cache",
+        "prior_cache_path": "out/attention_prior_cache",
         "betab_scaling_factor": 1.0,
         "keep_ambiguous": false
     },
