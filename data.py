@@ -63,6 +63,9 @@ class Data(torch.utils.data.Dataset):
                  use_attn_prior=False, attn_prior_threshold=1e-4,
                  prior_cache_path="", betab_scaling_factor=1.0, randomize=True,
                  keep_ambiguous=False, seed=1234):
+        if not cmudict_path:
+            file_path = os.path.dirname(os.path.realpath(__file__))
+            cmudict_path = os.path.realpath(os.path.join(file_path, "data/cmudict_dictionary"))
         self.max_wav_value = max_wav_value
         self.audiopaths_and_text = load_filepaths_and_text(filelist_path)
         self.use_attn_prior = use_attn_prior
