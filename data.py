@@ -14,18 +14,23 @@
 #  limitations under the License.
 #
 ###############################################################################
-import re
-import os
 import argparse
 import json
+import os
 import random
+import re
+from typing import List, Optional
+
 import numpy as np
 import torch
 import torch.utils.data
 from scipy.io.wavfile import read
 from scipy.stats import betabinom
+from torch import Tensor as T, Generator
+
 from audio_processing import TacotronSTFT
 from text import text_to_sequence, cmudict, _clean_text, get_arpabet
+from text.cmudict import CMUDict
 
 
 def beta_binomial_prior_distribution(phoneme_count, mel_count,
@@ -54,6 +59,22 @@ def load_wav_to_torch(full_path):
     """ Loads wavdata into torch array """
     sampling_rate, data = read(full_path)
     return torch.from_numpy(data).float(), sampling_rate
+
+
+def get_text_embedding(
+        text: str,
+        text_cleaners: List[str],
+        cmudict: CMUDict,
+        p_arpabet: float,
+        rand_gen: Optional[Generator] = None,
+) -> T:
+    text = _clean_text(text, text_cleaners)
+    words = re.findall(r'\S*\{.*?\}\S*|\S+', text)
+    text = ' '.join([get_arpabet(word, cmudict)
+                     if torch.rand((1,), generator=rand_gen) < p_arpabet else word
+                     for word in words])
+    text_emb = torch.tensor(text_to_sequence(text)).long()
+    return text_emb
 
 
 class Data(torch.utils.data.Dataset):
